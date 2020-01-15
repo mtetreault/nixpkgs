@@ -3941,6 +3941,8 @@ in
 
   imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
+  imx_usb_loader = callPackage ../development/misc/imx/imx_usb_loader { };
+
   inadyn = callPackage ../tools/networking/inadyn { };
 
   inboxer = callPackage ../applications/networking/mailreaders/inboxer { };
@@ -6664,6 +6666,8 @@ in
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   usync = callPackage ../applications/misc/usync { };
+
+  utp_com = callPackage ../development/misc/imx/utp_com { };
 
   uwsgi = callPackage ../servers/uwsgi { };
 

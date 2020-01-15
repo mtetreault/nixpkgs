@@ -4382,6 +4382,12 @@
     githubId = 4996739;
     name = "Masayuki Takeda";
   };
+  mtetreault = {
+    email = "mathieu.alexandre.tetreault@gmail.com";
+    github = "mtetreault";
+    githuId = 1382392;
+    name = "Mathieu Alexandre-Tetreault";
+  };
   MtP = {
     email = "marko.nixos@poikonen.de";
     github = "MtP76";
