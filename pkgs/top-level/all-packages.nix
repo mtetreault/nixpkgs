@@ -5637,6 +5637,8 @@ in
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
+  nrf-cli-tools = callPackage ../development/tools/nrf-cli-tools {};
+
   ndppd = callPackage ../applications/networking/ndppd { };
 
   nebula = callPackage ../tools/networking/nebula { };
