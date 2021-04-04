@@ -27989,6 +27989,8 @@ in
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
+  jlink = callPackage ../development/tools/jlink {};
+
   navidrome = callPackage ../servers/misc/navidrome {};
 
   zettlr = callPackage ../applications/misc/zettlr { };
