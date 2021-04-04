@@ -27470,6 +27470,8 @@ in
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
 
+  jlink = callPackage ../development/tools/jlink {};
+  
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
