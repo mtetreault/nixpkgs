@@ -1,15 +1,14 @@
 { stdenv
+, lib
 , fetchurl
 , dpkg
 , autoPatchelfHook
 , substituteAll
-, libudev
+, makeWrapper
+, udev
 , libusb1
 , jlink
 }:
-
-#PR: https://github.com/NixOS/nixpkgs/pull/80990
-
 
 let
   vMajor = "10";
@@ -46,37 +45,49 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-  ];
-  buildInputs = [ 
+    makeWrapper
     dpkg
-    libudev
+  ];
+
+  buildInputs = [ 
     libusb1
-    jlink
+    udev
   ];
 
   runtimeDependencies = [ 
     jlink
   ];
-  dontUnpack = true;
-  
+
+  dontBuild = true;
+  dontConfigure = true;
+
+  unpackPhase = ''
+    mkdir -p $out/deb
+    tar -xzvf ${src} -C $out/deb
+  '';
+
   installPhase = ''
-    mkdir -p $out
-    dpkg -x ${debName} $out
-    cp -av $out/opt/mergehex/* $out
-    cp -av $out/opt/nrfjprog/* $out
-    rm -rf $out/usr $out/opt $out/etc
+    mkdir -p $out/bin
+    dpkg-deb -x $out/deb/${debName} $out/deb
+    mv $out/deb/opt/mergehex $out
+    mv $out/deb/opt/nrfjprog $out
+
+    ln -s $out/mergehex/mergehex $out/bin/
+    ln -s $out/nrfjprog/nrfjprog $out/bin/
+    rm -rf deb
   '';
 
   postFixup = ''
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* -or -name \*.node\* \) ); do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
     done
+    wrapProgram "$out/bin/nrfjprog" --prefix LD_LIBRARY_PATH ":" "${jlink}/lib"
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://www.segger.com/downloads/jlink";
-    description = "SEGGER J-Link";
+    homepage = "https://www.nordicsemi.com/Software-and-tools/Development-Tools/nRF-Command-Line-Tools/Download";
+    description = "nRF CommandLine Tools";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" "armv7l-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
