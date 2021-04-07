@@ -19,7 +19,7 @@
 }:
 
 let
-  jlinkVersion = "698e";
+  jlinkVersion = "694";
 
   architecture = {
     x86_64-linux = "x86_64";
@@ -72,7 +72,9 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
-  runtimeDependencies = [ udev ];
+  runtimeDependencies = [ 
+    udev
+  ];
 
   installPhase = ''
     mkdir -p $out/{JLink,bin}
@@ -80,6 +82,7 @@ stdenv.mkDerivation rec {
     ln -s $out/JLink/J* $out/bin/
     rm -r $out/bin/JLinkDevices.xml $out/JLink/libQt*
     install -D -t $out/lib/udev/rules.d 99-jlink.rules
+    cp $out/JLink/*so $out/lib/
   '';
 
   preFixup = ''
